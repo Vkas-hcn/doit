@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <View
+        android:id="@+id/t0"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/t8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/t_icon14"
+        app:layout_constraintBottom_toBottomOf="@+id/t0"
+        app:layout_constraintEnd_toEndOf="@+id/t0"
+        app:layout_constraintStart_toStartOf="@+id/t0"
+        app:layout_constraintTop_toTopOf="@+id/t0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="#FF585858"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t0"
+        tools:text="Work" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

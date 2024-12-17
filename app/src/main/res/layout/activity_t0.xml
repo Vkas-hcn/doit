@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activitys.T0Activity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/t_icon22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="26dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t2">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/t_icon1" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Task tracker - to do list"
+            android:textColor="#4A256E"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <View
+        android:id="@+id/t0"
+        android:layout_width="200dp"
+        android:layout_height="6dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/t0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/t1"
+        android:layout_width="1dp"
+        android:layout_height="6dp"
+        android:background="@drawable/t1"
+        app:layout_constraintBottom_toBottomOf="@+id/t0"
+        app:layout_constraintStart_toStartOf="@+id/t0"
+        app:layout_constraintTop_toTopOf="@+id/t0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

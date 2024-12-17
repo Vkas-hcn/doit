@@ -1,0 +1,7 @@
+-keep class com.google.gson.**
+-optimizationpasses 5
+-dontskipnonpubliclibraryclassmembers
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
+-obfuscationdictionary tomask.txt
+-classobfuscationdictionary tomask.txt
+-packageobfuscationdictionary tomask.txt

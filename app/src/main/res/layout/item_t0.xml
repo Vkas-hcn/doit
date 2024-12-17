@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="15dp"
+    tools:background="#FF9277AC">
+
+    <View
+        android:id="@+id/t0"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF8F8F8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="12dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/t1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="6dp"
+            android:src="@mipmap/t_icon6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/t2"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@mipmap/t_icon7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#3B3B3B"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/t2"
+            app:layout_constraintStart_toEndOf="@+id/t1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="hello，welcomewelcomewelcomewelcomewelcomewelcomewelcomewelcome to xxx！" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/t5"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="1dp"
+            android:textColor="#59000000"
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/t3"
+            app:layout_constraintTop_toBottomOf="@+id/t3"
+            tools:text="work" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="#8E8E8E"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/t4"
+            app:layout_constraintStart_toEndOf="@+id/t4"
+            app:layout_constraintTop_toTopOf="@+id/t4"
+            tools:text="2023.12.05" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

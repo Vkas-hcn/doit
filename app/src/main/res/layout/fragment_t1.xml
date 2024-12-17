@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF8F8F8"
+    tools:context=".pgs.spgs.T1Fragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t0"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Focus"
+        android:textColor="#292929"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/t0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/t0" />
+
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/t2"
+        android:layout_width="216dp"
+        android:layout_height="216dp"
+        android:layout_marginBottom="100dp"
+        app:cpb_background_progressbar_color="#FFD7CCE8"
+        app:cpb_background_progressbar_width="10dp"
+        app:cpb_progress_direction="to_right"
+        app:cpb_progressbar_color="#FF4B256E"
+        app:cpb_progressbar_width="10dp"
+        app:cpb_round_border="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time management starts with focus."
+        android:textColor="#757575"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/t2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25:00"
+        android:textColor="#FF292929"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/t2"
+        app:layout_constraintEnd_toEndOf="@+id/t2"
+        app:layout_constraintStart_toStartOf="@+id/t2"
+        app:layout_constraintTop_toTopOf="@+id/t2" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t5"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@mipmap/t_icon18"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/t2"
+        app:layout_constraintTop_toBottomOf="@+id/t2"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t6"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:src="@mipmap/t_icon17"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/t2"
+        app:layout_constraintTop_toBottomOf="@+id/t2"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/t1"
+        android:gravity="center"
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="15dp"
+        android:text="Start Focus"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t5" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/t8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="#FFF8F8F8"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t1"
+        tools:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/t9"
+            android:layout_width="115dp"
+            android:layout_height="108dp"
+            android:src="@mipmap/t_icon20" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="25dp"
+            android:gravity="center"
+            android:lineHeight="22dp"
+            android:text="Congratulations! You have completed a \nPomodoro work session."
+            android:textColor="#757575"
+            android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="180dp"
+            android:background="@drawable/t1"
+            android:gravity="center"
+            android:paddingHorizontal="50dp"
+            android:paddingVertical="15dp"
+            android:text="Rest Mode"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

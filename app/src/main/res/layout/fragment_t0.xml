@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF8F8F8"
+    tools:context=".pgs.spgs.T0Fragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="Task tracker - to do list"
+        android:textColor="#292929"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:src="@mipmap/t_icon2"
+        app:layout_constraintBottom_toBottomOf="@+id/t0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/t0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="Today"
+        android:textColor="#C2C1C3"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/t0"
+        app:layout_constraintTop_toBottomOf="@+id/t0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="#292929"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/t2"
+        app:layout_constraintTop_toBottomOf="@+id/t2"
+        tools:text="27 March 2024" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t4"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="5dp"
+        android:src="@mipmap/t_icon3"
+        app:layout_constraintBottom_toBottomOf="@+id/t3"
+        app:layout_constraintStart_toEndOf="@+id/t3"
+        app:layout_constraintTop_toTopOf="@+id/t3" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t5"
+        android:layout_width="match_parent"
+        android:layout_height="117dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/t_icon4"
+        app:layout_constraintTop_toBottomOf="@+id/t4" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/t6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/t_icon5"
+        app:layout_constraintTop_toBottomOf="@+id/t5" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/t5"
+        app:layout_constraintStart_toStartOf="@+id/t5"
+        app:layout_constraintTop_toTopOf="@+id/t5">
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/t7"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cpb_background_progressbar_color="#A99CDF"
+            app:cpb_background_progressbar_width="6dp"
+            app:cpb_progress="50"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color="#00E294"
+            app:cpb_progressbar_width="6dp"
+            app:cpb_round_border="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="2/10" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="Tasks"
+            android:textColor="#CCFFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/t8" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/t7"
+            app:layout_constraintEnd_toEndOf="@+id/t7"
+            app:layout_constraintStart_toStartOf="@+id/t7"
+            app:layout_constraintTop_toTopOf="@+id/t7"
+            tools:text="100%" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:text="Explore new challenges try our \nrandom tasks"
+        android:textColor="#ff9277ac"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/t6"
+        app:layout_constraintStart_toStartOf="@+id/t6"
+        app:layout_constraintTop_toTopOf="@+id/t6" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/t3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/t6">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Todo"
+            android:textColor="#FF4A256E"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/t13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Complete"
+            android:textColor="#FFC2C1C3"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/t12"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/t14"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:paddingBottom="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/t13" />
+
+        <include
+            android:id="@+id/t16"
+            layout="@layout/item_t2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/t13" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/t15"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="110dp"
+        android:background="@drawable/t4"
+        android:gravity="center"
+        android:text="+"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
