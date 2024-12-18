@@ -48,6 +48,7 @@ object AdUtils {
     }
 
     fun getBlackData(): Boolean {
+
         val bean = T0App.t0Db.boxFor(T2Entity::class.java).all
         if (bean.isEmpty()) {
             return true

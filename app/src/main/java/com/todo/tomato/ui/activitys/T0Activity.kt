@@ -147,13 +147,14 @@ class T0Activity : AppCompatActivity() {
             attemptCount++
 
             if (T0App.adManagerOpen?.canShowAd(AdUtils.OPEN) == AdUtils.ad_show) {
-                adShown = true
                 AdUtils.log("准备OPEN广告中。。。$adShown")
-                T0App.adManagerOpen?.showAd(AdUtils.OPEN, activity) {
+                T0App.adManagerOpen?.showAd(AdUtils.OPEN, activity, {
                     jumpFun()
-                }
-                openJob?.cancel()
-                openJob = null
+                }, {
+                    adShown = true
+                    openJob?.cancel()
+                    openJob = null
+                })
             }
         }
 

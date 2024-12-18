@@ -59,7 +59,6 @@ class AdManager(private val application: Application) {
             log("已有$adType 广告，不在加载: ")
             return
         }
-        log("canRequestAd(adType)=${canRequestAd(adType)}")
         if (adCache.containsKey(adType) && canRequestAd(adType)) {
             log("$adType 广告过期，重新加载: ")
             qcAd(adType)
@@ -93,6 +92,8 @@ class AdManager(private val application: Application) {
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     log("${adType}广告加载失败=${loadAdError}")
+                    adLoadInProgress[adType] = false
+
                 }
             })
     }
@@ -110,6 +111,8 @@ class AdManager(private val application: Application) {
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     log("${adType}广告加载失败=${loadAdError}")
+                    adLoadInProgress[adType] = false
+
                 }
             })
     }
@@ -120,9 +123,10 @@ class AdManager(private val application: Application) {
         adTimestamps.remove(adType)
     }
 
-    fun showAd(adType: String, activity: AppCompatActivity, nextFun: () -> Unit) {
+    fun showAd(adType: String, activity: AppCompatActivity, nextFun: () -> Unit, wait: () -> Unit) {
         val state = activity.lifecycle.currentState.name == Lifecycle.State.RESUMED.name
         if (adCache.containsKey(adType) && state) {
+            wait()
             when (val ad = adCache[adType]) {
                 is AppOpenAd -> {
                     ad.fullScreenContentCallback =
@@ -224,7 +228,6 @@ class AdManager(private val application: Application) {
         }
         return AdUtils.ad_show
     }
-
 
 
 }

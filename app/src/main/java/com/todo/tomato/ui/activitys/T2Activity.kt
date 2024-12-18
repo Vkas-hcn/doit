@@ -150,9 +150,7 @@ class T2Activity : AppCompatActivity() {
                 nextFun()
                 return@launch
             }
-            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_wait) {
-                T0App.adManagerClick?.loadAd(AdUtils.CLICK)
-            }
+            T0App.adManagerClick?.loadAd(AdUtils.CLICK)
             loadingDialog.showLoading()
             try {
                 withTimeout(5000L) {

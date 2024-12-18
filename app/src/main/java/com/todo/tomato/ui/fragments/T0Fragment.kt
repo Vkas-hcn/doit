@@ -214,9 +214,7 @@ class T0Fragment : Fragment(), T0Inter {
                 nextFun()
                 return@launch
             }
-            if (T0App.adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_wait) {
-                T0App.adManagerTba?.loadAd(AdUtils.TBA)
-            }
+            T0App.adManagerTba?.loadAd(AdUtils.TBA)
             loadingDialog.showLoading()
 
             try {
@@ -248,9 +246,7 @@ class T0Fragment : Fragment(), T0Inter {
                 nextFun()
                 return@launch
             }
-            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_wait) {
-                T0App.adManagerClick?.loadAd(AdUtils.CLICK)
-            }
+            T0App.adManagerClick?.loadAd(AdUtils.CLICK)
             loadingDialog.showLoading()
             try {
                 withTimeout(5000L) {

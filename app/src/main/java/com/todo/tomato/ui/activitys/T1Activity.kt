@@ -48,7 +48,7 @@ class T1Activity : AppCompatActivity() {
             t0.adapter = vpAdapter
 
             t1.setOnClickListener {
-                showTbaIntAd(true)  {
+                showTbaIntAd(true) {
                     t1.setImageResource(R.mipmap.t_icon9)
                     t2.setImageResource(R.mipmap.t_icon8)
                     t0.currentItem = 0
@@ -87,21 +87,20 @@ class T1Activity : AppCompatActivity() {
                 nextFun()
                 return@launch
             }
-            if (adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_wait) {
-                adManagerTba?.loadAd(AdUtils.TBA)
-            }
+            adManagerTba?.loadAd(AdUtils.TBA)
             loadingDialog.showLoading()
 
             try {
                 withTimeout(5000L) {
                     while (isActive) {
                         if (adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_show) {
-                            adManagerTba?.showAd(AdUtils.TBA, this@T1Activity) {
+                            adManagerTba?.showAd(AdUtils.TBA, this@T1Activity, {
                                 nextFun()
-                            }
-                            loadingDialog.hideLoading()
-
-                            break
+                            }, {
+                                loadingDialog.hideLoading()
+                                jobTBA?.cancel()
+                                jobTBA = null
+                            })
                         }
                         delay(500L)
                     }
