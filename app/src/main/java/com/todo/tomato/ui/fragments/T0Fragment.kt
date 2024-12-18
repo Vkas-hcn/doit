@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.todo.tomato.ad.AdUtils
 import com.todo.tomato.databinding.FragmentT0Binding
 import com.todo.tomato.tools.T0App
 import com.todo.tomato.tools.t1F
@@ -22,6 +24,13 @@ import com.todo.tomato.tools.vm.T1Vm
 import com.todo.tomato.tools.bean.T0Entity
 import com.todo.tomato.ui.dialogs.T0Dialog
 import com.todo.tomato.tools.t2F
+import com.todo.tomato.ui.dialogs.LoadingDialog
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.util.Calendar
 
 class T0Fragment : Fragment(), T0Inter {
@@ -29,7 +38,10 @@ class T0Fragment : Fragment(), T0Inter {
     private lateinit var binding: FragmentT0Binding
 
     private val t1Vm: T1Vm by viewModels()
+    private var jobTBA: Job? = null
+    private var jobClick: Job? = null
 
+    private lateinit var loadingDialog: LoadingDialog
     private val t1Adapter: T1Adapter by lazy {
         T1Adapter()
     }
@@ -49,12 +61,15 @@ class T0Fragment : Fragment(), T0Inter {
         t1Vm.t0M = (c.get(Calendar.MONTH) + 1).toLong()
         t1Vm.t0D = c.get(Calendar.DAY_OF_MONTH).toLong()
         binding.t3.text = t1F(t1Vm.t0Y, t1Vm.t0M, t1Vm.t0D)
+        loadingDialog = LoadingDialog(requireActivity())
 
         rp()
 
         with(binding) {
             t1.setOnClickListener {
-                startActivity(Intent(requireActivity(), T3Activity::class.java))
+                showClickIntAd {
+                    startActivity(Intent(requireActivity(), T3Activity::class.java))
+                }
             }
             t3.setOnClickListener {
                 dLog()
@@ -102,8 +117,10 @@ class T0Fragment : Fragment(), T0Inter {
             t14.layoutManager = LinearLayoutManager(context)
 
             t15.setOnClickListener {
-                T0App.t0Entity = null
-                startActivity(Intent(requireActivity(), T2Activity::class.java))
+                showClickIntAd {
+                    T0App.t0Entity = null
+                    startActivity(Intent(requireActivity(), T2Activity::class.java))
+                }
             }
         }
         with(t1Vm) {
@@ -153,15 +170,17 @@ class T0Fragment : Fragment(), T0Inter {
     }
 
     override fun finish(entity: T0Entity) {
-        entity.finish = !entity.finish
-        if (entity.finish) {
-            entity.finishTime = System.currentTimeMillis()
-        } else {
-            entity.finishTime = 0L
+        showTbaIntAd {
+            entity.finish = !entity.finish
+            if (entity.finish) {
+                entity.finishTime = System.currentTimeMillis()
+            } else {
+                entity.finishTime = 0L
+            }
+            t1Vm.update(entity)
+            t1Vm.get()
+            rp()
         }
-        t1Vm.update(entity)
-        t1Vm.get()
-        rp()
     }
 
     private fun rp() {
@@ -175,7 +194,86 @@ class T0Fragment : Fragment(), T0Inter {
     }
 
     override fun look(entity: T0Entity) {
-        T0App.t0Entity = entity
-        startActivity(Intent(requireActivity(), T2Activity::class.java))
+        showClickIntAd {
+            T0App.t0Entity = entity
+            startActivity(Intent(requireActivity(), T2Activity::class.java))
+        }
     }
+
+    private fun showTbaIntAd(nextFun: () -> Unit) {
+        jobTBA?.cancel()
+        jobTBA = null
+        jobTBA = lifecycleScope.launch {
+            if (T0App.adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_jump_over) {
+                nextFun()
+                return@launch
+            }
+            val state = AdUtils.shouldLoadAd2()
+            if (!state) {
+                AdUtils.log("TBA广告，不展示: ")
+                nextFun()
+                return@launch
+            }
+            if (T0App.adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_wait) {
+                T0App.adManagerTba?.loadAd(AdUtils.TBA)
+            }
+            loadingDialog.showLoading()
+
+            try {
+                withTimeout(5000L) {
+                    while (isActive) {
+                        if (T0App.adManagerTba?.canShowAd(AdUtils.TBA) == AdUtils.ad_show) {
+                            T0App.adManagerTba?.showAdFragment(AdUtils.TBA, requireActivity()) {
+                                nextFun()
+                            }
+                            loadingDialog.hideLoading()
+
+                            break
+                        }
+                        delay(500L)
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                nextFun()
+                loadingDialog.hideLoading()
+            }
+        }
+    }
+
+    private fun showClickIntAd(nextFun: () -> Unit) {
+        jobClick?.cancel()
+        jobClick = null
+        jobClick = lifecycleScope.launch {
+            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_jump_over) {
+                nextFun()
+                return@launch
+            }
+            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_wait) {
+                T0App.adManagerClick?.loadAd(AdUtils.CLICK)
+            }
+            loadingDialog.showLoading()
+            try {
+                withTimeout(5000L) {
+                    while (isActive) {
+                        if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_show) {
+                            T0App.adManagerClick?.showAdFragment(AdUtils.CLICK, requireActivity()) {
+                                nextFun()
+                            }
+                            loadingDialog.hideLoading()
+                            jobClick?.cancel()
+                            jobClick = null
+                            break
+                        }
+                        delay(500L)
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                nextFun()
+                loadingDialog.hideLoading()
+                jobClick?.cancel()
+                jobClick = null
+            }
+        }
+    }
+
 }

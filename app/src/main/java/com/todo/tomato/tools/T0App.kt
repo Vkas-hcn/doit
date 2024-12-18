@@ -6,6 +6,10 @@ import android.content.SharedPreferences
 import com.applovin.sdk.AppLovinMediationProvider
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.initialize
+import com.todo.tomato.ad.AdManager
 import com.todo.tomato.tools.bean.MyObjectBox
 import com.todo.tomato.tools.bean.T0Entity
 import io.objectbox.BoxStore
@@ -17,9 +21,13 @@ class T0App : Application() {
     override fun onCreate() {
         super.onCreate()
         t0Name = packageName
+        Firebase.initialize(this)
+        FirebaseApp.initializeApp(this)
         t0Db = MyObjectBox.builder().androidContext(this).build()
         sharedPreferences = this.getSharedPreferences("TCtoList", Context.MODE_PRIVATE)
-
+        adManagerOpen = AdManager(this)
+        adManagerTba = AdManager(this)
+        adManagerClick = AdManager(this)
         registerActivityLifecycleCallbacks(T0Launcher())
 
         val initConfig = AppLovinSdkInitializationConfiguration.builder(
@@ -39,6 +47,9 @@ class T0App : Application() {
         var maxAd: MaxAd? = null
         var t0Entity: T0Entity? = null
         lateinit var sharedPreferences: SharedPreferences
+        var adManagerOpen: AdManager? = null
+        var adManagerTba: AdManager? = null
+        var adManagerClick: AdManager? = null
     }
 }
 

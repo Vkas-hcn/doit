@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("io.objectbox")
+    id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")
     id("stringfog")
 }
 
@@ -75,4 +77,11 @@ dependencies {
     implementation("com.applovin:applovin-sdk:+")
     implementation("com.github.kittinunf.fuel:fuel:3.0.0-alpha03")
     implementation("com.github.megatronking.stringfog:xor:5.0.0")
+    implementation("com.google.android.gms:play-services-ads:23.3.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+    implementation ("com.facebook.android:facebook-android-sdk:12.3.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation ("com.google.firebase:firebase-analytics-ktx")
+    implementation ("com.google.firebase:firebase-config-ktx")
+    implementation ("com.google.firebase:firebase-crashlytics-ktx")
 }

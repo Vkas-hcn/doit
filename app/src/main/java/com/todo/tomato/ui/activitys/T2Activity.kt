@@ -8,8 +8,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.todo.tomato.R
+import com.todo.tomato.ad.AdUtils
 import com.todo.tomato.databinding.ActivityT2Binding
 import com.todo.tomato.tools.T0App
 import com.todo.tomato.tools.t1F
@@ -17,6 +19,13 @@ import com.todo.tomato.tools.adapter.TypeAdapter
 import com.todo.tomato.tools.vm.T2Vm
 import com.todo.tomato.tools.bean.T0Entity
 import com.todo.tomato.tools.t2F
+import com.todo.tomato.ui.dialogs.LoadingDialog
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.util.Calendar
 
 class T2Activity : AppCompatActivity() {
@@ -25,7 +34,8 @@ class T2Activity : AppCompatActivity() {
     private val typeAdapter: TypeAdapter by lazy {
         TypeAdapter()
     }
-
+    private var jobClick: Job? = null
+    private lateinit var loadingDialog: LoadingDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,7 +46,7 @@ class T2Activity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        loadingDialog = LoadingDialog(this)
         if (T0App.t0Entity != null) {
             typeAdapter.selectType = T0App.t0Entity!!.type
             binding.t9.setText(T0App.t0Entity?.name ?: "")
@@ -63,43 +73,50 @@ class T2Activity : AppCompatActivity() {
             t6.layoutManager = GridLayoutManager(this@T2Activity, 5)
             t0.setOnClickListener { finish() }
             t11.setOnClickListener {
-                if (t9.text.toString().isEmpty() || typeAdapter.selectType == "") {
-                    Toast.makeText(this@T2Activity, "Please input something", Toast.LENGTH_LONG)
-                        .show()
-                    return@setOnClickListener
+                showClickIntAd {
+                    t11ClickFun()
                 }
-
-                if (T0App.t0Entity != null) {
-                    with(T0App.t0Entity!!) {
-                        this.name = t9.text.toString()
-                        this.note = t10.text.toString()
-                        this.type = typeAdapter.selectType
-                        this.createTime = System.currentTimeMillis()
-                        this.finishTime = 0L
-                        this.year = t2Vm.t0Y
-                        this.month = t2Vm.t0M
-                        this.day = t2Vm.t0D
-                        this.finish = false
-                    }
-                    t2Vm.update(T0App.t0Entity!!)
-                } else {
-                    t2Vm.put(
-                        T0Entity(
-                            name = t9.text.toString(),
-                            note = t10.text.toString(),
-                            type = typeAdapter.selectType,
-                            createTime = System.currentTimeMillis(),
-                            finishTime = 0L,
-                            year = t2Vm.t0Y,
-                            month = t2Vm.t0M,
-                            day = t2Vm.t0D,
-                            finish = false
-                        )
-                    )
-                }
-                Toast.makeText(this@T2Activity, "Saved successfully", Toast.LENGTH_LONG).show()
-                finish()
             }
+        }
+    }
+
+    private fun t11ClickFun() {
+        with(binding) {
+            if (t9.text.toString().isEmpty() || typeAdapter.selectType == "") {
+                Toast.makeText(this@T2Activity, "Please input something", Toast.LENGTH_LONG)
+                    .show()
+                return
+            }
+            if (T0App.t0Entity != null) {
+                with(T0App.t0Entity!!) {
+                    this.name = t9.text.toString()
+                    this.note = t10.text.toString()
+                    this.type = typeAdapter.selectType
+                    this.createTime = System.currentTimeMillis()
+                    this.finishTime = 0L
+                    this.year = t2Vm.t0Y
+                    this.month = t2Vm.t0M
+                    this.day = t2Vm.t0D
+                    this.finish = false
+                }
+                t2Vm.update(T0App.t0Entity!!)
+            } else {
+                t2Vm.put(
+                    T0Entity(
+                        name = t9.text.toString(),
+                        note = t10.text.toString(),
+                        type = typeAdapter.selectType,
+                        createTime = System.currentTimeMillis(),
+                        finishTime = 0L,
+                        year = t2Vm.t0Y,
+                        month = t2Vm.t0M,
+                        day = t2Vm.t0D,
+                        finish = false
+                    )
+                )
+            }
+            Toast.makeText(this@T2Activity, "Saved successfully", Toast.LENGTH_LONG).show()
+            finish()
         }
     }
 
@@ -123,4 +140,41 @@ class T2Activity : AppCompatActivity() {
         )
         datePickerDialog.show()
     }
+
+    private fun showClickIntAd(nextFun: () -> Unit) {
+        jobClick?.cancel()
+        jobClick = null
+        jobClick = lifecycleScope.launch {
+            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_jump_over) {
+                nextFun()
+                return@launch
+            }
+            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_wait) {
+                T0App.adManagerClick?.loadAd(AdUtils.CLICK)
+            }
+            loadingDialog.showLoading()
+            try {
+                withTimeout(5000L) {
+                    while (isActive) {
+                        if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_show) {
+                            T0App.adManagerClick?.showAdFragment(AdUtils.CLICK, this@T2Activity) {
+                                nextFun()
+                            }
+                            loadingDialog.hideLoading()
+                            jobClick?.cancel()
+                            jobClick = null
+                            break
+                        }
+                        delay(500L)
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                nextFun()
+                loadingDialog.hideLoading()
+                jobClick?.cancel()
+                jobClick = null
+            }
+        }
+    }
+
 }

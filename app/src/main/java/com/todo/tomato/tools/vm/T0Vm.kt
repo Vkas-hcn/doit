@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.todo.tomato.BuildConfig
+import com.todo.tomato.ad.AdUtils
 import com.todo.tomato.tools.bean.T2Entity
 import com.todo.tomato.tools.T0App
 import com.todo.tomato.tools.distinctId
@@ -81,6 +82,7 @@ class T0Vm : ViewModel() {
                             i = 1
                             val resultTag = body.string()
                             T0App.t0Db.boxFor(T2Entity::class.java).put(T2Entity(value = resultTag))
+                            AdUtils.log("getUserType: $resultTag")
                         }
                     }
                 }.onFailure {
