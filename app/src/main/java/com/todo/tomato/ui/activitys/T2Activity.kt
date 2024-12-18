@@ -78,9 +78,7 @@ class T2Activity : AppCompatActivity() {
                         .show()
                     return@setOnClickListener
                 }
-                showClickIntAd {
-                    t11ClickFun()
-                }
+                t11ClickFun()
             }
         }
     }
@@ -140,40 +138,6 @@ class T2Activity : AppCompatActivity() {
             day
         )
         datePickerDialog.show()
-    }
-
-    private fun showClickIntAd(nextFun: () -> Unit) {
-        jobClick?.cancel()
-        jobClick = null
-        jobClick = lifecycleScope.launch {
-            if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_jump_over) {
-                nextFun()
-                return@launch
-            }
-            T0App.adManagerClick?.loadAd(AdUtils.CLICK)
-            loadingDialog.showLoading()
-            try {
-                withTimeout(5000L) {
-                    while (isActive) {
-                        if (T0App.adManagerClick?.canShowAd(AdUtils.CLICK) == AdUtils.ad_show) {
-                            T0App.adManagerClick?.showAdFragment(AdUtils.CLICK, this@T2Activity) {
-                                nextFun()
-                            }
-                            loadingDialog.hideLoading()
-                            jobClick?.cancel()
-                            jobClick = null
-                            break
-                        }
-                        delay(500L)
-                    }
-                }
-            } catch (e: TimeoutCancellationException) {
-                nextFun()
-                loadingDialog.hideLoading()
-                jobClick?.cancel()
-                jobClick = null
-            }
-        }
     }
 
 }

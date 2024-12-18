@@ -37,14 +37,14 @@ object AdUtils {
         log("shouldLoadAd")
 
         loadCount++
-        return loadCount % 2 == 0 // 偶数次返回true，奇数次返回false
+        return loadCount % 3 == 0
     }
 
     private var loadCount2 = 0
 
     fun shouldLoadAd2(): Boolean {
         loadCount2++
-        return loadCount2 % 3 == 0 // 每隔2次加载广告，即第3、6、9次等
+        return loadCount2 % 3 == 0
     }
 
     fun getBlackData(): Boolean {
