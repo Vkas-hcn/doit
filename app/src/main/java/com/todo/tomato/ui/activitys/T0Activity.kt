@@ -32,6 +32,7 @@ class T0Activity : AppCompatActivity() {
     private lateinit var binding: ActivityT0Binding
     private val t0Vm: T0Vm by viewModels()
     private var done = false
+    private var openJob: Job? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,6 +48,8 @@ class T0Activity : AppCompatActivity() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {}
             })
+        AdUtils.log("T0Activity-start")
+        AdUtils.cloneAdState = false
         t0Vm.getUserType()
         t0Vm.appPoint()
         initAdStart()
@@ -66,24 +69,13 @@ class T0Activity : AppCompatActivity() {
 
 
     private fun prepareJump() {
-        if (done) return
-        done = true
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 if (lifecycle.currentState == Lifecycle.State.RESUMED) {
                     withContext(Dispatchers.Main) {
-                        if (the) {
-                            if (rlfk) {
-                                finish()
-                            } else {
-                                startActivity(Intent(this@T0Activity, T1Activity::class.java))
-                                finish()
-                            }
-                        } else {
-                            startActivity(Intent(this@T0Activity, T1Activity::class.java))
-                            finish()
-                        }
-                        rlfk = false
+                        startActivity(Intent(this@T0Activity, T1Activity::class.java))
+                        finish()
+                        cancel()
                     }
                     break
                 }
@@ -107,19 +99,21 @@ class T0Activity : AppCompatActivity() {
         T0App.adManagerOpen?.loadAd(AdUtils.OPEN)
         lifecycleScope.launch {
             delay(2000)
-            T0App.adManagerOpen?.loadAd(AdUtils.TBA)
-            T0App.adManagerOpen?.loadAd(AdUtils.CLICK)
+            T0App.adManagerTba?.loadAd(AdUtils.TBA)
+            T0App.adManagerClick?.loadAd(AdUtils.CLICK)
         }
         watingCMP()
     }
 
     private fun watingCMP() {
-        CoroutineScope(Dispatchers.Main).launch {
+        openJob?.cancel()
+        openJob = null
+        openJob = lifecycleScope.launch {
             while (true) {
                 val cmpState = T0App.t0Db.boxFor(T3Entity::class.java).all.isNotEmpty()
                 if (cmpState) {
                     t0Vm.start()
-                    AdUtils.openOpenAd(this@T0Activity) {
+                    openOpenAd(this@T0Activity) {
                         prepareJump()
                     }
                     cancel()
@@ -128,5 +122,46 @@ class T0Activity : AppCompatActivity() {
                 delay(500)
             }
         }
+    }
+
+    suspend fun openOpenAd(activity: AppCompatActivity, jumpFun: () -> Unit) {
+        if (T0App.adManagerOpen?.canShowAd(AdUtils.OPEN) == AdUtils.ad_jump_over) {
+            jumpFun()
+            openJob?.cancel()
+            openJob = null
+            return
+        }
+        if (T0App.adManagerOpen?.canShowAd(AdUtils.OPEN) == AdUtils.ad_wait) {
+            T0App.adManagerOpen?.loadAd(AdUtils.OPEN)
+        }
+
+        var adShown = false
+        var attemptCount = 0
+
+        while (attemptCount < 20) {
+            delay(500) // 每 500ms 检查一次
+            AdUtils.log("等待OPEN广告中。。。$adShown")
+
+            if (adShown) break
+
+            attemptCount++
+
+            if (T0App.adManagerOpen?.canShowAd(AdUtils.OPEN) == AdUtils.ad_show) {
+                adShown = true
+                AdUtils.log("准备OPEN广告中。。。$adShown")
+                T0App.adManagerOpen?.showAd(AdUtils.OPEN, activity) {
+                    jumpFun()
+                }
+                openJob?.cancel()
+                openJob = null
+            }
+        }
+
+        // 超过最大尝试次数时跳转
+        if (!adShown) {
+            AdUtils.log("OPEN广告超时。。。")
+            jumpFun()
+        }
+
     }
 }

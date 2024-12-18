@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.applovin.adview.AppLovinFullscreenActivity
 import com.google.android.gms.ads.AdActivity
+import com.todo.tomato.ad.AdUtils
 import com.todo.tomato.ui.activitys.T0Activity
 
 class T0Launcher : Application.ActivityLifecycleCallbacks {
@@ -24,6 +25,7 @@ class T0Launcher : Application.ActivityLifecycleCallbacks {
         if (t0P != 0L && System.currentTimeMillis() - t0P >= 3000L) {
             rlfk = true
             if(adActivity!=null){
+                AdUtils.cloneAdState = true
                 adActivity?.finish()
             }
             activity.startActivity(Intent(activity, T0Activity::class.java))

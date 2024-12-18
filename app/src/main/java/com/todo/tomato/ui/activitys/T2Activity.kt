@@ -73,6 +73,11 @@ class T2Activity : AppCompatActivity() {
             t6.layoutManager = GridLayoutManager(this@T2Activity, 5)
             t0.setOnClickListener { finish() }
             t11.setOnClickListener {
+                if (t9.text.toString().isEmpty() || typeAdapter.selectType == "") {
+                    Toast.makeText(this@T2Activity, "Please input something", Toast.LENGTH_LONG)
+                        .show()
+                    return@setOnClickListener
+                }
                 showClickIntAd {
                     t11ClickFun()
                 }
@@ -82,11 +87,7 @@ class T2Activity : AppCompatActivity() {
 
     private fun t11ClickFun() {
         with(binding) {
-            if (t9.text.toString().isEmpty() || typeAdapter.selectType == "") {
-                Toast.makeText(this@T2Activity, "Please input something", Toast.LENGTH_LONG)
-                    .show()
-                return
-            }
+
             if (T0App.t0Entity != null) {
                 with(T0App.t0Entity!!) {
                     this.name = t9.text.toString()

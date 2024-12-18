@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -27,26 +28,20 @@ class AdManager(private val application: Application) {
     private val tbaId = "ca-app-pub-3940256099942544/1033173712"
     private val clickId = "ca-app-pub-3940256099942544/1033173712"
 
-
     init {
         MobileAds.initialize(application) {
             Log.d("AdManager", "AdMob initialized")
         }
     }
 
-
-
-
     private fun canRequestAd(adType: String): Boolean {
         val currentTime = System.currentTimeMillis()
         val lastLoadTime = adTimestamps[adType] ?: 0L
-        return currentTime - lastLoadTime > 3600 * 1000 // 1 hour
+        return adTimestamps[adType] != null && (currentTime - lastLoadTime > 3000 * 1000) // 50min
     }
 
     fun loadAd(adType: String) {
-        log("111111111111111 ${adLoadInProgress[adType]}----${adType}")
         if (adLoadInProgress[adType] == true) return
-
         adLoadInProgress[adType] = true
         val adId = when (adType) {
             AdUtils.OPEN -> openId
@@ -62,6 +57,13 @@ class AdManager(private val application: Application) {
     private fun loadAdFromList(adType: String, adId: String) {
         if (adCache.containsKey(adType) && !canRequestAd(adType)) {
             log("已有$adType 广告，不在加载: ")
+            return
+        }
+        log("canRequestAd(adType)=${canRequestAd(adType)}")
+        if (adCache.containsKey(adType) && canRequestAd(adType)) {
+            log("$adType 广告过期，重新加载: ")
+            qcAd(adType)
+            loadAd(adType)
             return
         }
         val blackData = AdUtils.getBlackData()
@@ -115,16 +117,19 @@ class AdManager(private val application: Application) {
     fun qcAd(adType: String) {
         adLoadInProgress.remove(adType)
         adCache.remove(adType)
+        adTimestamps.remove(adType)
     }
 
     fun showAd(adType: String, activity: AppCompatActivity, nextFun: () -> Unit) {
-        if (adCache.containsKey(adType) && isAppInForeground(activity)) {
+        val state = activity.lifecycle.currentState.name == Lifecycle.State.RESUMED.name
+        if (adCache.containsKey(adType) && state) {
             when (val ad = adCache[adType]) {
                 is AppOpenAd -> {
                     ad.fullScreenContentCallback =
                         object : FullScreenContentCallback() {
                             override fun onAdDismissedFullScreenContent() {
-                                if (isAppInForeground(activity)) {
+                                if (!AdUtils.cloneAdState) {
+                                    log("关闭-${adType}广告: ")
                                     nextFun()
                                 }
                                 qcAd(adType)
@@ -146,8 +151,8 @@ class AdManager(private val application: Application) {
                 is InterstitialAd -> {
                     ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
-                            log("关闭-${adType}广告: ")
-                            if (isAppInForeground(activity)) {
+                            if (!AdUtils.cloneAdState) {
+                                log("关闭-${adType}广告: ")
                                 nextFun()
                             }
                             qcAd(adType)
@@ -174,13 +179,14 @@ class AdManager(private val application: Application) {
     }
 
     fun showAdFragment(adType: String, fragmentActivity: FragmentActivity, nextFun: () -> Unit) {
-        if (adCache.containsKey(adType) && isAppInForeground(fragmentActivity)) {
+        val state = fragmentActivity.lifecycle.currentState.name == Lifecycle.State.RESUMED.name
+        if (adCache.containsKey(adType) && state) {
             when (val ad = adCache[adType]) {
                 is InterstitialAd -> {
                     ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
-                            log("关闭-${adType}广告: ")
-                            if (isAppInForeground(fragmentActivity)) {
+                            if (!AdUtils.cloneAdState) {
+                                log("关闭-${adType}广告: ")
                                 nextFun()
                             }
                             qcAd(adType)
@@ -219,16 +225,6 @@ class AdManager(private val application: Application) {
         return AdUtils.ad_show
     }
 
-    fun isAppInForeground(activity: FragmentActivity): Boolean {
-        val activityManager =
-            activity.getSystemService(Activity.ACTIVITY_SERVICE) as android.app.ActivityManager
-        val runningAppProcesses = activityManager.runningAppProcesses ?: return false
-        for (processInfo in runningAppProcesses) {
-            if (processInfo.importance == android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && processInfo.processName == activity.packageName) {
-                return true
-            }
-        }
-        return false
-    }
+
 
 }
